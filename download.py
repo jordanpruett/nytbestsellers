@@ -1,5 +1,5 @@
 """
-Functions for getting urls from Hawes and downloading Hawes PDFs as tempfiles.
+Methods for getting urls from Hawes and downloading Hawes PDFs as tempfiles.
 """
 
 import re
