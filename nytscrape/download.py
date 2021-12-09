@@ -11,21 +11,20 @@ from bs4 import BeautifulSoup
 def get_year_urls(mainpage: str):
 
     request = requests.get(mainpage)
-    soup = BeautifulSoup(request.text)
+    soup = BeautifulSoup(request.text, features="html.parser")
 
     return [link.get('href')
             for link in soup.find_all('a')
             if re.match(r'\d{4}/\d{4}\.htm', link.get('href'))]
 
-def get_pdf_urls(year: str):
+def get_pdf_urls(yearpage: str):
 
-    url = f'www.hawes.com/{year}/{year}.htm'
-    request = requests.get(url)
-    soup = BeautifulSoup(request.text)
+    request = requests.get(yearpage)
+    soup = BeautifulSoup(request.text, features="html.parser")
 
     return [link.get('href')
             for link in soup.find_all('a')
-            if link.get('href').endswith('.pdf')]
+            if link.get('href') and link.get('href').endswith('.pdf')]
 
 def get_pdf_tempfile(pdf_url: str):
 
