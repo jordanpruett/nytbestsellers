@@ -71,7 +71,6 @@ def parse_blurb(blurb: str):
     match = re.search(r'\((.*?)\)', blurb)
     if match:
         publisher = match.group()
-        publisher = publisher.replace('(', '').replace(')', '')
     else:
         publisher = ''
 
@@ -81,5 +80,7 @@ def parse_blurb(blurb: str):
     else:
         description = ''
 
+    # leave parentheses until the end, as they are useful for parsing description
+    publisher = publisher.replace('(', '').replace(')', '')
     return Book(title, author, publisher, description)
 
