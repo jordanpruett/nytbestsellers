@@ -14,12 +14,12 @@ def add_row_to_csv(week: str, book, destpath: str):
     if not os.path.exists(destpath):
         with open(destpath, 'w', encoding='UTF-8') as f:
             writer = csv.writer(f, delimiter='\t')
-            writer.writerow(['week', 'title', 'author', 'publisher', 'description'])
+            writer.writerow(['week', 'rank', 'title', 'author', 'publisher', 'description'])
 
     else:
         with open(destpath, 'a+', encoding='UTF-8') as f:
             writer =  csv.writer(f, delimiter='\t')
-            row = [week, book.title, book.author, book.publisher, book.description]
+            row = [week, book.rank, book.title, book.author, book.publisher, book.description]
             writer.writerow(row)
     
     return
