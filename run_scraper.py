@@ -49,8 +49,10 @@ def main():
 
                     blurbs = extract_blurbs(pdf_page)
                     if blurbs:
+                        rank = 1
                         for blurb in blurbs:
                             book = parse_blurb(blurb)
+                            book.rank = rank
                             # sometimes the week sneaks in as a title w/o anything else
                             if book.author or book.publisher:
                                 add_row_to_csv(
@@ -58,10 +60,10 @@ def main():
                                     book=book,
                                     destpath=destpath
                                 )
+                                rank += 1
                     else:
                         with open(os.path.join('data', MISSING_WEEKS), 'a+') as f:
-                            f.write(week)
-                            f.write('\n')
+                            f.write(f'{year}\t{week}\n')
                     complete = True
                 
                 except CONNECTION_EXCEPTIONS:
