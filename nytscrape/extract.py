@@ -13,6 +13,7 @@ class Book:
     author: str
     publisher: str
     description: str
+    rank: int = None
 
 def splitList(lst, sep):
     """
@@ -56,29 +57,37 @@ def parse_blurb(blurb: str):
     title = re.split(r'[,!?] (?=[a-z])', blurb)[0]
 
     # author
-    match = re.search(r'(?<=, by ).+?(?= \()', blurb)
-    if match:
-        author = match.group()
-        author = author[:-1]
-    else:
-        author = blurb.replace(title, '')
-        author = author.replace(',', '')
-        author = author.split('(')[0]
-        author = author.strip()
-        author = author[:-1]
-
-    # publisher
-    match = re.search(r'\((.*?)\)', blurb)
-    if match:
-        publisher = match.group()
-    else:
+    if '(' not in blurb: # special case for a few badly-formatted weeks in 1972
+        if ' by ' in blurb: 
+            author = blurb.split(' by ')[1]
+        else:
+            author = '' # if neither paren nor "by", we know it's a week header rather than a blurb
         publisher = ''
-
-    # description
-    if match:
-        description = blurb.split(publisher)[1].strip()
-    else:
         description = ''
+    else:
+        match = re.search(r'(?<=, by ).+?(?= \()', blurb)
+        if match:
+            author = match.group()
+            author = author[:-1]
+        else:
+            author = blurb.replace(title, '')
+            author = author.replace(',', '')
+            author = author.split('(')[0]
+            author = author.strip()
+            author = author[:-1]
+
+        # publisher
+        match = re.search(r'\((.*?)\)', blurb)
+        if match:
+            publisher = match.group()
+        else:
+            publisher = ''
+
+        # description
+        if match:
+            description = blurb.split(publisher)[1].strip()
+        else:
+            description = ''
 
     # leave parentheses until the end, as they are useful for parsing description
     publisher = publisher.replace('(', '').replace(')', '')
